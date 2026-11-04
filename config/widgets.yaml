@@ -1,0 +1,43 @@
+# 左侧 6 个指标按钮 = pages；点击后右侧渲染该页的 widgets。
+# chart 类型：funding_matrix | lsr_bars | fng | oi | liq | market   （对应 web/widgets/<chart>.js）
+# 新增一个指标页：加一个 page；新增卡片：在某个 page 的 widgets 里加一条。
+# controls：symbol=显示币种选择器；periods=周期切换（1h/4h/1d）；kinds=多空比口径切换
+title: 合约衍生品看板
+subtitle: Derivatives Dashboard · Demo
+
+pages:
+  - id: funding
+    title: 资金费率
+    desc: 币种 × 交易所的永续合约资金费率矩阵（绿=正费率，多头付费给空头；红=负费率，空头付费给多头）。
+    widgets:
+      - { id: funding_matrix, chart: funding_matrix, title: 资金费率热力矩阵, controls: [unit] }
+
+  - id: lsr
+    title: 多空比
+    desc: 各交易所多空账户占比（绿=多，红=空）。
+    widgets:
+      - { id: lsr_bars, chart: lsr_bars, title: 多空比 · 按交易所, controls: [symbol, kind] }
+
+  - id: fng
+    title: 恐慌贪婪指数
+    desc: 全市场情绪指数（alternative.me）。
+    widgets:
+      - { id: fng, chart: fng, title: 恐慌贪婪指数 }
+
+  - id: oi
+    title: 持仓量 OI
+    desc: 各交易所合约未平仓持仓量（美元）。
+    widgets:
+      - { id: oi, chart: oi, title: 持仓量 · 按交易所堆叠, controls: [symbol, period], default_period: 4h }
+
+  - id: liq
+    title: 爆仓数据
+    desc: 多单 / 空单爆仓金额（美元）。
+    widgets:
+      - { id: liq, chart: liq, title: 爆仓金额 · 多空, controls: [symbol, period], default_period: 1h }
+
+  - id: market
+    title: 价格与成交量
+    desc: 各交易所同一币种永续合约的最新价与 24h 成交额对比。
+    widgets:
+      - { id: market, chart: market, title: 价格与成交量对比, controls: [symbol] }

@@ -1,0 +1,25 @@
+# 数据源清单 —— 想多看一家交易所/一个币种，就在这里加。
+# defaults.symbols：所有交易所共用的币种列表（单个数据源里写 symbols 可覆盖）。
+# 通用字段：id（唯一，也是前端显示的交易所 key）、type（对应 collectors/<type>.py）、name（显示名）、
+#          every_min（该源多少分钟采集一次，默认取 .env 的 REFRESH_MINUTES）、kind（metric）、doc（来源文档链接）
+# sources 的先后顺序 = 页面上交易所的显示顺序；Bybit 作为主数据源放第一位。
+defaults:
+  symbols: [BTC, ETH, SOL, XRP, DOGE]
+
+sources:
+  - { id: bybit,       type: bybit,       kind: metric, name: Bybit,       doc: "https://bybit-exchange.github.io/docs/v5/intro" }
+  - { id: binance,     type: binance,     kind: metric, name: Binance,     doc: "https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info" }
+  - { id: okx,         type: okx,         kind: metric, name: OKX,         doc: "https://www.okx.com/docs-v5/en/" }
+  - { id: bitget,      type: bitget,      kind: metric, name: Bitget, workers: 2,      doc: "https://www.bitget.com/api-doc/common/intro" }
+  - { id: gate,        type: gate,        kind: metric, name: Gate,        doc: "https://www.gate.com/docs/developers/apiv4/en/" }
+  - { id: kucoin,      type: kucoin,      kind: metric, name: KuCoin,      doc: "https://www.kucoin.com/docs-new/introduction" }
+  - { id: htx,         type: htx,         kind: metric, name: HTX,         doc: "https://www.htx.com/en-us/opend/newApiPages/" }
+  - { id: mexc,        type: mexc,        kind: metric, name: MEXC,        doc: "https://www.mexc.com/api-docs/futures/market-endpoints" }
+  - { id: deribit,     type: deribit,     kind: metric, name: Deribit,     doc: "https://docs.deribit.com/" }
+  - { id: coinbase,    type: coinbase,    kind: metric, name: Coinbase,    doc: "https://docs.cdp.coinbase.com/intx/docs/welcome" }
+  - { id: hyperliquid, type: hyperliquid, kind: metric, name: Hyperliquid, doc: "https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api" }
+
+  # 全市场情绪指标（恐慌贪婪指数）
+  - { id: fng, type: fear_greed, kind: metric, name: 恐慌贪婪指数, days: 365, symbols: [MARKET], doc: "https://alternative.me/crypto/fear-and-greed-index/" }
+
+# 想加新交易所？见 README「新增数据源」：新建 collectors/xxx.py，再在这里加一行。

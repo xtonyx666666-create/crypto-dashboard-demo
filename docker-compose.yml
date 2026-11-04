@@ -1,0 +1,16 @@
+# 一键启动：docker compose up -d   →  http://localhost:8000
+# api 负责网页和接口；scheduler 负责定时采集；两者共用 ./data 里的 SQLite 文件。
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    env_file: [{ path: .env, required: false }]
+    volumes: ["./data:/app/data", "./config:/app/config:ro"]
+    restart: unless-stopped
+  scheduler:
+    build: .
+    command: ["python", "-m", "scheduler.jobs"]
+    env_file: [{ path: .env, required: false }]
+    environment: { REFRESH_MINUTES: "5" }
+    volumes: ["./data:/app/data", "./config:/app/config:ro"]
+    restart: unless-stopped

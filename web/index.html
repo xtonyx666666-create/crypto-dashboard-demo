@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>合约衍生品看板</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">◈</span><div><b id="brand-title">看板</b><small id="brand-sub"></small></div></div>
+      <nav id="nav"></nav>
+      <div class="side-foot">
+        <div><span class="dot"></span><span id="updated">加载中…</span></div>
+        <div class="muted">页面每 60 秒自动刷新</div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="head">
+        <div><h1 id="page-title"></h1><p id="page-desc" class="muted"></p></div>
+        <div class="head-right"><button id="refresh" class="btn">⟳ 立即刷新 Bybit</button></div>
+      </header>
+      <section id="content"></section>
+    </main>
+  </div>
+
+  <script src="/vendor/echarts.min.js"></script>
+  <!-- 卡片组件：新增图表类型 = 在 web/widgets/ 新建文件并在这里引入 -->
+  <script src="/widgets/common.js"></script>
+  <script src="/widgets/funding_matrix.js"></script>
+  <script src="/widgets/lsr_bars.js"></script>
+  <script src="/widgets/fng.js"></script>
+  <script src="/widgets/oi.js"></script>
+  <script src="/widgets/liq.js"></script>
+  <script src="/widgets/market.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
