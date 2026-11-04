@@ -156,6 +156,29 @@ def market(symbol: str = "BTC"):
     return {"symbol": symbol, "median": med, "rows": rows}
 
 
+# 7) 行情走势：K 线（懒加载分页：before=最早一根时间戳往前取；since=增量取最新）
+from fastapi.middleware.gzip import GZipMiddleware
+from processors import klines
+
+app.add_middleware(GZipMiddleware, minimum_size=1024)
+
+
+@app.on_event("startup")
+def _warm_klines():
+    klines.start_warm()
+
+
+@app.get("/api/kline")
+def kline(symbol: str = "BTC", interval: str = "4h", before: int | None = None, since: int | None = None, limit: int = 2000):
+    symbol = symbol.upper()
+    if symbol not in klines.SYMBOLS or interval not in klines.INTERVALS:
+        raise HTTPException(400, f"symbol 可选 {klines.SYMBOLS}，interval 可选 {list(klines.INTERVALS)}")
+    klines.ensure(symbol, interval)
+    if since is not None:
+        klines.live(symbol, interval)
+    return klines.query(symbol, interval, before, max(100, min(limit, 5000)), since)
+
+
 _last_refresh: dict[str, float] = {}
 
 

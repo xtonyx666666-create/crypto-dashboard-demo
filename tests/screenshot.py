@@ -1,4 +1,4 @@
-"""无头 Chrome 给 6 个指标页截图：python tests/screenshot.py [URL]（需 pip install playwright，使用本机 Chrome）"""
+"""无头 Chrome 给 7 个指标页截图：python tests/screenshot.py [URL]（需 pip install playwright，使用本机 Chrome）"""
 import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 URL = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000"
 OUT = Path(__file__).resolve().parent.parent / "screenshots"
 OUT.mkdir(exist_ok=True)
-PAGES = ["funding", "lsr", "fng", "oi", "liq", "market"]
+PAGES = ["funding", "lsr", "fng", "oi", "liq", "market", "kline"]
 
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox"])

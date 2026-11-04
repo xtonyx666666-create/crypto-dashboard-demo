@@ -92,3 +92,9 @@ docker-compose.yml      api + scheduler 两个服务
 - 没有登录/权限；`/api/refresh` 未鉴权（仅限内网/本机演示，上线前请加鉴权或删除）。
 - 免费公开接口可能限频（如 Bitget 偶发 429，已自动重试）或随时调整；单个接口失败不会影响其它指标，详见 `/api/status`。
 - Docker 配置已写好但本次环境没有安装 Docker，未实际执行 `docker compose up`；本机 `./run.sh` 已实测。
+
+## 第 7 个指标：行情走势（K 线）
+- 接口：`GET /api/kline?symbol=BTC|ETH|SOL&interval=5m|15m|4h|1d|1w[&before=毫秒时间戳&limit=2000][&since=毫秒时间戳]`
+- 数据源：Bybit v5 `/v5/market/kline`（category=linear，USDT 永续），每页 1000 根，用 `end` 往回翻页到 2025-01-01；Bybit 失败时自动降级 OKX `history-candles`（每页 300 根）。
+- 缓存：独立 SQLite `data/klines.db`，启动后后台按 1w→1d→4h→15m→5m 预热回补（约 4~5 分钟补完）；某个组合被请求时若尚未回补会立即单独回补（懒加载）。
+- 前端：首屏只取最近 2000 根，dataZoom 拖到最左侧时用 `before=` 每次再取 5000 根；「加载全部」按钮一次拉到 2025-01；最新一根每 30 秒用 `since=` 增量刷新。

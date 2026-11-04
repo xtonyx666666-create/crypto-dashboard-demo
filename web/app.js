@@ -1,8 +1,8 @@
-// 单页入口：左侧 6 个指标按钮 → 右侧渲染该页的卡片（widgets）。
+// 单页入口：左侧 7 个指标按钮 → 右侧渲染该页的卡片（widgets）。
 // 卡片组件注册在 window.WIDGETS[chart]：render(bodyEl, widgetCfg, state, meta) → Promise；每 60 秒自动重绘。
 window.WIDGETS = window.WIDGETS || {};
 const $ = (s) => document.querySelector(s);
-const ICONS = { funding: "%", lsr: "⇅", fng: "☺", oi: "▦", liq: "⚡", market: "$" };
+const ICONS = { funding: "%", lsr: "⇅", fng: "☺", oi: "▦", liq: "⚡", market: "$", kline: "📈" };
 const state = { symbol: localStorage.symbol || "BTC", period: null, kind: "account", unit: "8h" };
 let META = null, PAGE = null;
 

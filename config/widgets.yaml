@@ -1,5 +1,5 @@
-# 左侧 6 个指标按钮 = pages；点击后右侧渲染该页的 widgets。
-# chart 类型：funding_matrix | lsr_bars | fng | oi | liq | market   （对应 web/widgets/<chart>.js）
+# 左侧 7 个指标按钮 = pages；点击后右侧渲染该页的 widgets。
+# chart 类型：funding_matrix | lsr_bars | fng | oi | liq | market | kline   （对应 web/widgets/<chart>.js）
 # 新增一个指标页：加一个 page；新增卡片：在某个 page 的 widgets 里加一条。
 # controls：symbol=显示币种选择器；periods=周期切换（1h/4h/1d）；kinds=多空比口径切换
 title: 合约衍生品看板
@@ -41,3 +41,9 @@ pages:
     desc: 各交易所同一币种永续合约的最新价与 24h 成交额对比。
     widgets:
       - { id: market, chart: market, title: 价格与成交量对比, controls: [symbol] }
+
+  - id: kline
+    title: 行情走势
+    desc: BTC / ETH / SOL 永续合约 K 线（Bybit v5，USDT 永续），历史自 2025-01-01，拖动/缩放到左侧自动加载更早数据，最新一根每 30 秒刷新。
+    widgets:
+      - { id: kline, chart: kline, title: K 线 · 成交量, controls: [kline] }
