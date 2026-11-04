@@ -47,7 +47,7 @@
       `<div class="kpi"><small>本周期最高 / 最低</small><b>${fmt(last[2])} / ${fmt(last[3])}</b></div>` +
       `<div class="kpi"><small>已加载 / 服务器已缓存</small><b>${r.length.toLocaleString()} / ${(m.count || 0).toLocaleString()} 根</b></div>`;
     const from = m.first ? lab(m.first) : "—";
-    K.body.querySelector("#k-note").textContent = `数据源：${m.source === "okx" ? "OKX（Bybit 不可用，已自动降级）" : "Bybit v5 /market/kline（category=linear）"}；` +
+    K.body.querySelector("#k-note").textContent = `数据源：${m.source === "okx" ? "OKX（Bybit 不可用，已自动降级）" : m.source === "bybit+okx" ? "Bybit v5 /market/kline（个别页临时失败，已用 OKX 补齐）" : "Bybit v5 /market/kline（category=linear）"}；` +
       `服务器缓存最早 ${from}${m.complete ? "（已回补到 2025-01-01）" : "，历史回补中…"}；当前已加载最早 ${lab(r[0][0])}。拖动或缩放到最左侧会自动加载更早数据；最新一根每 30 秒刷新。`;
   }
 

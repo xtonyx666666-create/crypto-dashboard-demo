@@ -57,14 +57,21 @@ def _okx(sym, iv, end_ms, limit=300):
 
 
 def _fetch(sym, iv, end_ms, small=False):
-    st = _state.setdefault((sym, iv), {"done": False, "source": "bybit", "error": ""})
-    if st["source"] == "bybit":
-        try:
-            return _bybit(sym, iv, end_ms, 3 if small else 1000)
-        except Exception as e:                      # 被地区封锁 / 限流 → 降级 OKX
-            st["error"] = f"Bybit: {e}"[:200]
-            st["source"] = "okx"
-    return _okx(sym, iv, end_ms, 3 if small else 300)
+    """优先 Bybit（失败重试 3 次）；仍失败则本页改用 OKX。连续 5 页 Bybit 失败才整体切到 OKX（被地区封锁的情况）。"""
+    st = _state.setdefault((sym, iv), {"done": False, "source": "bybit", "error": "", "fails": 0})
+    if st.get("fails", 0) < 5:
+        for a in range(3):
+            try:
+                rows = _bybit(sym, iv, end_ms, 3 if small else 1000)
+                st.update(source="bybit", fails=0)
+                return rows
+            except Exception as e:
+                st["error"] = f"Bybit: {e}"[:200]
+                time.sleep(0.5 * (a + 1))
+        st["fails"] = st.get("fails", 0) + 1
+    rows = _okx(sym, iv, end_ms, 3 if small else 300)
+    st["source"] = "okx" if st["fails"] >= 5 else "bybit+okx"
+    return rows
 
 
 def _range(sym, iv):
