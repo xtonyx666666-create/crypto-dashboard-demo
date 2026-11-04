@@ -164,9 +164,11 @@ def refresh(source: str = "bybit"):
     """手动立即刷新一个数据源（默认 Bybit，主数据源）。每个源最少间隔 30 秒，避免被频繁点击打爆上游接口。"""
     import time
     from scheduler.jobs import run_all
-    if time.time() - _last_refresh.get(source, 0) < 30:
-        return {"skipped": True, "reason": "30 秒内已刷新过"}
-    _last_refresh[source] = time.time()
+    if source not in {s["id"] for s in load_sources()}:
+        raise HTTPException(404, "未知数据源")
+    if time.time() - _last_refresh.get("_all", 0) < 60:
+        return {"skipped": True, "reason": "60 秒内已刷新过"}
+    _last_refresh["_all"] = time.time()
     return {"results": run_all(source)}
 
 
